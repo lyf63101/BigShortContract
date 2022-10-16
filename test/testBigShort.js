@@ -9,6 +9,22 @@ describe("BigShort", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
+
+  before(async function () {
+    await network.provider.request({
+      method: "hardhat_reset",
+      params: [
+        {
+          forking: {
+            jsonRpcUrl: "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+            //blockNumber: <BLOCK_NUMBER>,
+          },
+        },
+      ],
+    });
+  });
+
+
   async function deployOneYearLockFixture() {
     const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
     const ONE_GWEI = 1_000_000_000;
