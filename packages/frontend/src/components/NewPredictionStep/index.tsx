@@ -1,29 +1,28 @@
 import { ROUTERS } from "@constants/router";
-import { Popover, Steps, StepsProps } from "antd";
+import { Steps } from "antd";
+import { FC } from "react";
 import { useMatch } from "react-router-dom";
 import css from "./index.module.less";
 
 const { Step } = Steps;
 
-const customDot: StepsProps["progressDot"] = (dot, { status, index }) => (
-  <Popover
-    content={
-      <span>
-        step {index} status: {status}
-      </span>
-    }
-  >
-    {dot}
-  </Popover>
-);
+export type StepNum = 0 | 1 | 2 | 3;
 
-const NewPredictionStep = () => {
+const NewPredictionStep: FC<{ step: StepNum; setStep: (v: StepNum) => void }> = ({
+  step,
+  setStep,
+}) => {
   const routerMatch = useMatch(ROUTERS.NEW_PREDICATION);
   // console.log(routerMatch);
   if (!routerMatch) return null;
   return (
     <div className={css.steps}>
-      <Steps direction="vertical" current={1} progressDot={customDot}>
+      <Steps
+        direction="vertical"
+        current={step}
+        progressDot
+        onChange={(val) => setStep(val as StepNum)}
+      >
         <Step
           title="Step 1:  Create  Prediction"
           description={<div className={css.contentPadding} />}

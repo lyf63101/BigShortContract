@@ -1,5 +1,4 @@
 import { AppstoreOutlined, RocketOutlined } from "@ant-design/icons";
-import NewPredictionStep from "@components/NewPredictionStep";
 import { ROUTERS } from "@constants/router";
 import { Button, Menu, MenuProps } from "antd";
 import { FC, ReactNode, useState } from "react";
@@ -45,12 +44,7 @@ const BaseLayout: FC<{ children: ReactNode }> = ({ children }) => {
           </Button>
         </div>
       </div>
-      <div className={css.body}>
-        <div className={css.steps}>
-          <NewPredictionStep />
-        </div>
-        <div className={css.content}>{children}</div>
-      </div>
+      <div className={css.body}>{children}</div>
     </div>
   );
 };
