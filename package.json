@@ -1,9 +1,10 @@
 {
-  "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
-    "hardhat": "^2.12.0"
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev:app": "pnpm -F \"frontend\" start",
+    "build": "pnpm -F \"frontend\" -F \"contract\" build"
   },
-  "dependencies": {
-    "@chainlink/contracts": "^0.5.1"
-  }
+  "author": "",
+  "license": "ISC"
 }

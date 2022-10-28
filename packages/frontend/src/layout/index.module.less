@@ -1,0 +1,30 @@
+.wrapper {
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 32px;
+
+    .left {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+
+      .logo {
+        margin-right: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+    }
+
+    .rightButton {
+      > button {
+        &:first-child {
+          margin-right: 16px;
+        }
+      }
+    }
+  }
+}
