@@ -10,10 +10,9 @@ export type StepNum = 0 | 1 | 2 | 3;
 
 const NewPredictionStep: FC<{ step: StepNum; setStep: (v: StepNum) => void }> = ({
   step,
-  setStep,
+  // setStep,
 }) => {
   const routerMatch = useMatch(ROUTERS.NEW_PREDICATION);
-  // console.log(routerMatch);
   if (!routerMatch) return null;
   return (
     <div className={css.steps}>
@@ -21,7 +20,7 @@ const NewPredictionStep: FC<{ step: StepNum; setStep: (v: StepNum) => void }> = 
         direction="vertical"
         current={step}
         progressDot
-        onChange={(val) => setStep(val as StepNum)}
+        // onChange={(val) => setStep(val as StepNum)}
       >
         <Step
           title="Step 1:  Create  Prediction"
