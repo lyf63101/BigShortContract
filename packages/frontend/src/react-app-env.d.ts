@@ -2,6 +2,7 @@
 /// <reference types="react" />
 /// <reference types="react-dom" />
 
+import { MetaMaskInpageProvider } from "@metamask/providers";
 // declare namespace NodeJS {
 //   interface ProcessEnv {
 //     readonly NODE_ENV: "development" | "production" | "test";
@@ -65,17 +66,34 @@
 //   export default classes;
 // }
 
-declare module "*.module.scss" {
-  const classes: { readonly [key: string]: string };
-  export default classes;
-}
+// declare module "*.module.scss" {
+//   const classes: { readonly [key: string]: string };
+//   export default classes;
+// }
 
-declare module "*.module.less" {
-  const classes: { readonly [key: string]: string };
-  export default classes;
-}
+// declare module "*.module.less" {
+//   const classes: { readonly [key: string]: string };
+//   export default classes;
+// }
 
 // declare module "react-animated-weather" {
 //   const cmp: any;
 //   export default cmp;
 // }
+
+declare global {
+  interface Window {
+    // ethereum?: providers.ExternalProvider & MetaMask;
+    ethereum?: MetaMaskInpageProvider;
+  }
+
+  declare module "*.module.scss" {
+    const classes: { readonly [key: string]: string };
+    export default classes;
+  }
+
+  declare module "*.module.less" {
+    const classes: { readonly [key: string]: string };
+    export default classes;
+  }
+}

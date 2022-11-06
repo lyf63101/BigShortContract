@@ -32,6 +32,10 @@ module.exports = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    localhost: {
+      url: "http://127.0.0.1:8545",
+      accounts: ['bc9cb8340efc1e974a0c5a96de32bceb0dbefc0f13bc5fe37b8c69f612aaaadf']
+    },
     hardhat: {
     }
   },

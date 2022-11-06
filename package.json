@@ -2,8 +2,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev:app": "pnpm -F \"frontend\" start",
-    "build": "pnpm -F \"frontend\" -F \"contract\" build"
+    "dev:app": "pnpm -F frontend start",
+    "build": "pnpm -F frontend -F contract build"
   },
   "author": "",
   "license": "ISC"
