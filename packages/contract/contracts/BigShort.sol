@@ -24,7 +24,7 @@ contract BigShortAlpha {
 
     // IERC20 public USDT = IERC20(0xdAC17F958D2ee523a2206206994597C13D831ec7); // mainnet
 
-    IERC20 public USDT = IERC20(0x509Ee0d083DdF8AC028f2a56731412edD63223B9); // testnet    
+    IERC20 public USDT = IERC20(0x07865c6E87B9F70255377e024ace6630C1Eaa37F); // testnet USDC
 
     event Withdrawal(uint amount, uint when);
 
@@ -71,15 +71,13 @@ contract BigShortAlpha {
 
     function starterPay() external {
         require(msg.sender == starter, "only starter can cancel");
-        USDT.approve(address(this), amount);
-        USDT.transfer(address(this), amount);
+        USDT.transferFrom(msg.sender, address(this), amount);
         starter_paied = true;
     }
 
     function counterPartyPay() external {
         require(msg.sender == counter_party, "only starter can cancel");
-        USDT.approve(address(this), amount);
-        USDT.transfer(address(this), amount);
+        USDT.transferFrom(msg.sender, address(this), amount);
         counter_party_paied = true;
     }
 

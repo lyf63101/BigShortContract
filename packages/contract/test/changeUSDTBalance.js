@@ -6,6 +6,8 @@ function getSlot(userAddress, mappingSlot) {
   )
 }
 
+const usdcAddress = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F".toLowerCase(); // usdc testnet
+
 async function checkSlot(erc20, mappingSlot) {
   const contractAddress = erc20.address
   const userAddress = ethers.constants.AddressZero
