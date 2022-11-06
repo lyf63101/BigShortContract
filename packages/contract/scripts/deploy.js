@@ -15,8 +15,8 @@ async function main() {
 
   const predictionPrice = 1500;
 
-  const Lock = await hre.ethers.getContractFactory("BigShortAlpha");
-  const lock = await Lock.deploy(unlockTime,predictionPrice, { value: lockedAmount });
+  const Lock = await hre.ethers.getContractFactory("BigShortAlphaFactory");
+  const lock = await Lock.deploy();
 
   await lock.deployed();
 
