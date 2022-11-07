@@ -26,7 +26,7 @@ contract BigShortAlpha {
 
     IERC20 public USDT = IERC20(0x07865c6E87B9F70255377e024ace6630C1Eaa37F); // testnet USDC
 
-    event Withdrawal(uint amount, uint when);
+    event Claim(address winner, uint amount, uint when);
 
     /**
      * Network: Goerli
@@ -70,13 +70,13 @@ contract BigShortAlpha {
     }
 
     function starterPay() external {
-        require(msg.sender == starter, "only starter can cancel");
+        require(msg.sender == starter, "only starter can pay");
         USDT.transferFrom(msg.sender, address(this), amount);
         starter_paied = true;
     }
 
     function counterPartyPay() external {
-        require(msg.sender == counter_party, "only starter can cancel");
+        require(msg.sender == counter_party, "only counter_party can pay");
         USDT.transferFrom(msg.sender, address(this), amount);
         counter_party_paied = true;
     }
@@ -84,25 +84,29 @@ contract BigShortAlpha {
     function cancel() external {
         require(msg.sender == starter, "only starter can cancel");
         require(starter_paied && (counter_party_paied == false), "could only cancel when counter not paied");
-        require(block.timestamp >= bet_start + 7 days, "could only cancel after 3 days");
+        require(block.timestamp >= bet_start + 7 days, "could only cancel after 7 days");
         USDT.transfer(starter, amount);
     }
 
     function claimRewards() public {
         // console.log("time is %s, unlockTime is %s", block.timestamp, unlockTime);
-        require(msg.sender == starter || msg.sender == counter_party, "You aren't the owner"); 
+        require((msg.sender == starter) || (msg.sender == counter_party), "You aren't the owner"); 
         require(block.timestamp >= deadline, "You can't claim yet");
+        require(starter_paied && counter_party_paied, "only can claim when both paied");
 
         uint priceNow = uint(this.getLatestPrice());
-
+        address winner = starter;
         // console.log("Price is %s, prediction is %s", uint(priceNow), uint(pricePrediction));
-        if (higherOrEqual) {
-            require(priceNow >= pricePrediction, "price less than prediction");
-            USDT.transfer(starter, amount);
-            //emit Withdrawal(address(this).balance, block.timestamp);
-            return;
+        if (priceNow < pricePrediction) {
+          if (higherOrEqual) {
+            winner = counter_party;
+          }
+        } else {
+          if (!higherOrEqual) {
+            winner = counter_party;
+          }
         }
-        require(priceNow < pricePrediction);
-        USDT.transfer(counter_party, amount);
+        USDT.transfer(winner, amount);
+        emit Claim(winner, amount, block.timestamp);
     }
 }

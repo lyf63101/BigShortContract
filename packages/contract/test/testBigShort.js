@@ -122,43 +122,53 @@ describe("BigShort", function () {
       it("Should pay success", async function () {
         const { contract,starter, counter_party, amount } = await loadFixture(deployOneYearLockFixture);
         await changeUSDTBalance(starter.address, 1e8);
-        await changeUSDTBalance(counter_party.address, 1e8);
+        // await changeUSDTBalance(counter_party.address, 1e8);
         const USDTContract = await new ethers.Contract(USDTAddress, abi, starter);
+        await USDTContract.transfer(counter_party.address, 5*1e7);
         const balance = await USDTContract.balanceOf(starter.address);
-        console.log("balance: ", balance.toString());
+        const balance2 = await USDTContract.balanceOf(counter_party.address);
+        console.log("balance: of starter ", balance.toString());
+        console.log("balance of counter_party: ", balance2.toString());
         console.log("amount: ", amount);
         await USDTContract.approve(contract.address, amount);
+        await USDTContract.connect(counter_party).approve(contract.address, amount);
         const tx = await contract.starterPay();
         console.log(tx);
         await expect(tx).not.to.be.reverted;
+        const tx2 = await contract.connect(counter_party).counterPartyPay();
+        await expect(tx2).not.to.be.reverted;
         expect(await contract.starter_paied()).to.equal(true);
+        expect(await contract.counter_party_paied()).to.equal(true);
       });
 
-      // it("Should revert with the right error if called from another account", async function () {
-      //   const { contract, unlockTime, otherAccount } = await loadFixture(
-      //     deployOneYearLockFixture
-      //   );
+      it("Should revert if not arrive cancel time", async function () {
+        const { contract,starter, counter_party, amount } = await loadFixture(deployOneYearLockFixture);
+        await changeUSDTBalance(starter.address, 1e8);
+        // await changeUSDTBalance(counter_party.address, 1e8);
+        const USDTContract = await new ethers.Contract(USDTAddress, abi, starter);
+        const balance = await USDTContract.balanceOf(starter.address);
+        console.log("balance: of starter ", balance.toString());
+        console.log("amount: ", amount);
+        await USDTContract.approve(contract.address, amount);
+        const tx = await contract.starterPay();
+        await expect(tx).not.to.be.reverted;
+        await expect(contract.cancel()).to.be.revertedWith("could only cancel after 7 days");
+      });
 
-      //   // We can increase the time in Hardhat Network
-      //   await time.increaseTo(unlockTime);
-
-      //   // We use lock.connect() to send a transaction from another account
-      //   await expect(contract.connect(otherAccount).withdraw()).to.be.revertedWith(
-      //     "You aren't the owner"
-      //   );
-      // });
-
-    //   it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
-    //     const { contract, unlockTime } = await loadFixture(
-    //       deployOneYearLockFixture
-    //     );
-    //     console.log(unlockTime);
-    //     console.log(await contract.getLatestPrice());
-    //     // Transactions are sent using the first signer by default
-    //     await time.increaseTo(unlockTime);
-
-    //     await expect(contract.withdraw()).not.to.be.reverted;
-    //   });
+      it("Should success if arrive cancel time", async function () {
+        const { contract,starter, counter_party, deadline, amount } = await loadFixture(deployOneYearLockFixture);
+        await changeUSDTBalance(starter.address, 1e8);
+        // await changeUSDTBalance(counter_party.address, 1e8);
+        const USDTContract = await new ethers.Contract(USDTAddress, abi, starter);
+        const balance = await USDTContract.balanceOf(starter.address);
+        console.log("balance: of starter ", balance.toString());
+        console.log("amount: ", amount);
+        await USDTContract.approve(contract.address, amount);
+        const tx = await contract.starterPay();
+        await expect(tx).not.to.be.reverted;
+        await time.increaseTo(deadline);
+        await expect(contract.cancel()).not.to.be.reverted;
+      });
     });
 
     describe("Events", function () {
@@ -175,7 +185,70 @@ describe("BigShort", function () {
       // });
     });
 
-    describe("Transfers", function () {
+    describe("Claim", function () {
+      it("Should revert if not arrive deadline", async function () {
+        const { contract,starter, counter_party, amount } = await loadFixture(deployOneYearLockFixture);
+        await changeUSDTBalance(starter.address, 1e8);
+        // await changeUSDTBalance(counter_party.address, 1e8);
+        const USDTContract = await new ethers.Contract(USDTAddress, abi, starter);
+        const balance = await USDTContract.balanceOf(starter.address);
+        await USDTContract.approve(contract.address, amount);
+        const tx = await contract.starterPay();
+        await expect(tx).not.to.be.reverted;
+        await expect(contract.claimRewards()).to.be.revertedWith("You can't claim yet");
+      });
+
+      it("Should revert if not both paid", async function () {
+        const { contract,starter, counter_party,deadline, amount } = await loadFixture(deployOneYearLockFixture);
+        await changeUSDTBalance(starter.address, 1e8);
+        // await changeUSDTBalance(counter_party.address, 1e8);
+        const USDTContract = await new ethers.Contract(USDTAddress, abi, starter);
+        const balance = await USDTContract.balanceOf(starter.address);
+        await USDTContract.approve(contract.address, amount);
+        const tx = await contract.starterPay();
+        await expect(tx).not.to.be.reverted;
+        await time.increaseTo(deadline);
+        await expect(contract.claimRewards()).to.be.revertedWith("only can claim when both paied");
+      });
+
+      it("Should claim success", async function () {
+        const { contract,starter, counter_party, amount,deadline, predictionPrice, higherOrEqual } = await loadFixture(deployOneYearLockFixture);
+        await changeUSDTBalance(starter.address, 1e8);
+        // await changeUSDTBalance(counter_party.address, 1e8);
+        const USDTContract = await new ethers.Contract(USDTAddress, abi, starter);
+        await USDTContract.transfer(counter_party.address, 5*1e7);
+        await USDTContract.approve(contract.address, amount);
+        await USDTContract.connect(counter_party).approve(contract.address, amount);
+        const tx = await contract.starterPay();
+        await expect(tx).not.to.be.reverted;
+        const tx2 = await contract.connect(counter_party).counterPartyPay();
+        await expect(tx2).not.to.be.reverted;
+        expect(await contract.starter_paied()).to.equal(true);
+        expect(await contract.counter_party_paied()).to.equal(true);
+        await time.increaseTo(deadline);
+        const price = await contract.getLatestPrice();
+        console.log("price: ", price.toString(), "predictionPrice: ", predictionPrice.toString());
+        if (price < predictionPrice) {
+          if (higherOrEqual) {
+            expect(await contract.claimRewards() ).to.be.reverted;
+            expect(await contract.connect(counter_party).claimRewards() ).to.not.be.reverted;
+          } else {
+            expect(await contract.connect(counter_party).claimRewards() ).to.be.reverted;
+            expect(await contract.claimRewards() ).to.not.be.reverted;
+          }
+        } else {
+          if (higherOrEqual) {
+            expect(await contract.claimRewards() ).to.not.be.reverted;
+          } else {
+            expect(await contract.connect(counter_party).claimRewards() ).to.not.be.reverted;
+          }
+        }
+        const balance = await USDTContract.balanceOf(starter.address);
+        const balance2 = await USDTContract.balanceOf(counter_party.address);
+        console.log("starter balance: ", balance.toString(), "counter_party balance: ", balance2.toString());
+      });
+
+
       // it("Should transfer the funds to the owner", async function () {
       //   const { contract, unlockTime, lockedAmount, owner } = await loadFixture(
       //     deployOneYearLockFixture
