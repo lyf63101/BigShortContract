@@ -51,13 +51,14 @@ const SharePrediction: FC<{
     try {
       setLoading(true);
       const signer = library.getSigner();
-      const { hash } = await approveUSDC(signer, { amount });
+      const { hash } = await approveUSDC(signer, betContract, { amount });
       await (await library.getTransaction(hash)).wait();
-      console.log("approve end");
       if (isCounterParty) {
-        await betContract.counterPartyPay();
+        const { hash } = await betContract.counterPartyPay();
+        await (await library.getTransaction(hash)).wait();
       } else {
-        await betContract.starterPay();
+        const { hash } = await betContract.starterPay();
+        await (await library.getTransaction(hash)).wait();
       }
       // TODO: 优化 reload
       window.location.reload();
