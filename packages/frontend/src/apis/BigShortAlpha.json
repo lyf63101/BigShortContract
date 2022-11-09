@@ -40,6 +40,12 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "winner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
@@ -51,7 +57,7 @@
         "type": "uint256"
       }
     ],
-    "name": "Withdrawal",
+    "name": "Claim",
     "type": "event"
   },
   {

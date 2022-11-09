@@ -23,6 +23,8 @@ const PredictionStart: FC<{ nextStep: () => void; betContract: Contract; deadlin
   const [starter, setStarter] = useState("");
   const [isHigher, setIsHigher] = useState(false);
   const [latestPrice, setLatestPrice] = useState(0);
+  const [amount, setAmount] = useState(0);
+
   useEffect(() => {
     betContract.counter_party().then(setCounterParty);
     betContract.starter().then(setStarter);
@@ -31,6 +33,10 @@ const PredictionStart: FC<{ nextStep: () => void; betContract: Contract; deadlin
       .getLatestPrice()
       .then((res: any) => res.toNumber() / 1e8)
       .then(setLatestPrice);
+    betContract
+      .amount()
+      .then((res: any) => res.toNumber())
+      .then(setAmount);
   }, []);
   const seeContract = () => {
     const url = getAddressExploreUrl(betContract.address);
@@ -76,7 +82,7 @@ const PredictionStart: FC<{ nextStep: () => void; betContract: Contract; deadlin
             <div>{latestPrice.toFixed(2)} ETH / USD</div>
           </div>
           <div>
-            <Statistic title="Account Balance (CNY)" value={112893} precision={2} />
+            <Statistic title="Account Balance (USD)" value={amount} precision={2} />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useEagerConnect, useInactiveListener } from "@hooks/useWallet";
 import { useWeb3React } from "@web3-react/core";
-import { Button } from "antd";
+import { Button, Popover } from "antd";
 import { useState, useEffect } from "react";
 import css from "./index.module.less";
 import { injectedConnector } from "@hooks/useWallet";
@@ -35,9 +35,11 @@ const WallectButton = () => {
 
   if (connected) {
     return (
-      <Button type="primary" size="large" onClick={deactivate} className={css.wrapper}>
-        {briefAddress(account)}
-      </Button>
+      <Popover content="disconnect">
+        <Button type="primary" size="large" onClick={deactivate} className={css.wrapper}>
+          {briefAddress(account)}
+        </Button>
+      </Popover>
     );
   }
 

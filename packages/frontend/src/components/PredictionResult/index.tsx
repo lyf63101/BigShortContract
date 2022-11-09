@@ -2,11 +2,35 @@ import { getAddressExploreUrl } from "@utils/getAddressExploreUrl";
 import { handleError } from "@utils/handleError";
 import { Button } from "antd";
 import { Contract } from "ethers";
-import { FC, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import css from "./index.module.less";
 
-const PredictionResult: FC<{ nextStep: () => void; betContract: Contract }> = ({ betContract }) => {
+const PredictionResult: FC<{
+  nextStep: () => void;
+  betContract: Contract;
+  isCounterParty: boolean;
+}> = ({ betContract }) => {
   const [loading, setLoading] = useState(false);
+  const [counterParty, setCounterParty] = useState("");
+  const [starter, setStarter] = useState("");
+  const [isHigher, setIsHigher] = useState(false);
+  const [pricePrediction, setPricePrediction] = useState(0);
+  const [amount, setAmount] = useState(0);
+
+  useEffect(() => {
+    betContract.counter_party().then(setCounterParty);
+    betContract.starter().then(setStarter);
+    betContract.higherOrEqual().then(setIsHigher);
+    betContract
+      .pricePrediction()
+      .then((res: any) => res.toNumber())
+      .then(setPricePrediction);
+    betContract
+      .amount()
+      .then((res: any) => res.toNumber())
+      .then(setAmount);
+  }, []);
+
   const claimToken = async () => {
     try {
       setLoading(true);
@@ -17,22 +41,28 @@ const PredictionResult: FC<{ nextStep: () => void; betContract: Contract }> = ({
       setLoading(false);
     }
   };
+
   const seeContract = () => {
     const url = getAddressExploreUrl(betContract.address);
     window.open(url, "_blank");
   };
+
+  const [higher, lower] = useMemo(() => {
+    if (isHigher) return [starter, counterParty];
+    return [counterParty, starter];
+  }, [isHigher, counterParty, starter]);
+
   return (
     <div className={css.wrapper}>
       <div className={css.contentLine}>
         <span>
-          In 2022-07-22 12:00 am UTC, if ETH price is higher or equal than 2000.00 USD , address
-          0xf584F8728B874a6a5c7A8d4d387C9aae9172D621 will send 20,000.00 USDC to
+          In 2022-07-22 12:00 am UTC, if ETH price is higher or equal than {pricePrediction} USD ,
+          then address 【{higher}】 will send {amount} USDC to 【{lower}】.
         </span>
       </div>
       <div className={css.contentLine}>
-        0x3ddfa8ec3052539b6c9549f12cea2c295cff5296. If ETH price is lower than 2000.00 USD, then
-        0x3ddfa8ec3052539b6c9549f12cea2c295cff5296 will send 20,000.00 USDC to
-        0xf584F8728B874a6a5c7A8d4d387C9aae9172D621.
+        If ETH price is lower than {pricePrediction} USD, then address 【{lower}】 will send{" "}
+        {amount} USDC to 【{higher}】.
       </div>
       <div className={css.resultLine}>
         <span>Winner is address: XXXXXX</span>

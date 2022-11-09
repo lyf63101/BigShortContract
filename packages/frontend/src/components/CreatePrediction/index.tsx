@@ -25,7 +25,7 @@ const CreatePrediction: FC<{ nextStep: () => void }> = () => {
         predicted_price: Number(formData.predicted_price) || 0,
         deadline: formData.deadline.valueOf() || 0,
         higherOrEqual: formData.higherOrEqual,
-        amount: Number(formData.predicted_price) || 0,
+        amount: Number(formData.amount) || 0,
       };
       const signer = library.getSigner();
       const txHash = await createBet(signer, payload);

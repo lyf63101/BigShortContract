@@ -5,12 +5,16 @@ import { FC, useEffect, useMemo, useState } from "react";
 import css from "./index.module.less";
 import copy from "copy-to-clipboard";
 import { handleError } from "@utils/handleError";
+import { approveUSDC } from "@apis/approveUSDC";
+import { useWeb3React } from "@web3-react/core";
 
 const SharePrediction: FC<{
   nextStep: () => void;
   isCounterParty: boolean;
   betContract: Contract;
 }> = ({ betContract, isCounterParty }) => {
+  const { library } = useWeb3React();
+
   const [loading, setLoading] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
   const [pricePrediction, setPricePrediction] = useState(0);
@@ -43,8 +47,13 @@ const SharePrediction: FC<{
   };
 
   const payTheBet = async () => {
+    if (!library) return;
     try {
       setLoading(true);
+      const signer = library.getSigner();
+      const { hash } = await approveUSDC(signer, { amount });
+      await (await library.getTransaction(hash)).wait();
+      console.log("approve end");
       if (isCounterParty) {
         await betContract.counterPartyPay();
       } else {
@@ -102,7 +111,7 @@ const SharePrediction: FC<{
           You win if ETH price is {higherOrLower} than ${pricePrediction}.
         </div>
         <div>
-          Stake ${amount} TO Win ${amount}
+          Stake ${amount} To Win ${amount}
         </div>
       </div>
       <div className={css.button}>

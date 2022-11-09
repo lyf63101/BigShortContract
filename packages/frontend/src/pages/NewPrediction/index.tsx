@@ -88,7 +88,11 @@ const NewPrediction = () => {
             />
           )}
           {step === 3 && betContract && (
-            <PredictionResult nextStep={() => setStep(3)} betContract={betContract} />
+            <PredictionResult
+              nextStep={() => setStep(3)}
+              betContract={betContract}
+              isCounterParty={isCounterParty}
+            />
           )}
         </div>
       </div>

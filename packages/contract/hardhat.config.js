@@ -33,10 +33,12 @@ module.exports = {
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
     localhost: {
+      chainId: 1337,
       url: "http://127.0.0.1:8545",
-      accounts: ['bc9cb8340efc1e974a0c5a96de32bceb0dbefc0f13bc5fe37b8c69f612aaaadf']
+      accounts: ['0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80']
     },
     hardhat: {
+      chainId: 1337,
       forking: {
         url: "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
         //blockNumber: <BLOCK_NUMBER>,
