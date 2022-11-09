@@ -6,7 +6,9 @@ npx hardhat run --network localhost scripts\deploy.js
 
 metamask add rpc localhost http://127.0.0.1:8545/
 
+## set local account balance
 
+npx hardhat run --network localhost  test\setBalance.js
 
 # test
 npx hardhat test
