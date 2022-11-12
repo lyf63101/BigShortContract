@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { FC, useEffect, useState } from "react";
 import css from "./index.module.less";
 import { Statistic } from "antd";
@@ -6,6 +6,8 @@ import { Contract } from "ethers";
 import { getAddressExploreUrl } from "@utils/getAddressExploreUrl";
 import { useCountdown } from "usehooks-ts";
 import dayjs from "dayjs";
+import AddressCmp from "@components/AddressCmp";
+import useEtherScanUrl from "@hooks/useEtherScanUrl";
 
 const getCountDown = (seconds: number, deadline: number) => {
   const end = dayjs(seconds * 1000);
@@ -24,6 +26,7 @@ const PredictionStart: FC<{ nextStep: () => void; betContract: Contract; deadlin
   const [isHigher, setIsHigher] = useState(false);
   const [latestPrice, setLatestPrice] = useState(0);
   const [amount, setAmount] = useState(0);
+  const [pricePrediction, setPricePrediction] = useState(0);
 
   useEffect(() => {
     betContract.counter_party().then(setCounterParty);
@@ -35,11 +38,22 @@ const PredictionStart: FC<{ nextStep: () => void; betContract: Contract; deadlin
       .then(setLatestPrice);
     betContract
       .amount()
-      .then((res: any) => res.toNumber())
+      .then((res: any) => res.toNumber().toFixed(2))
       .then(setAmount);
+    betContract
+      .pricePrediction()
+      .then((res: any) => res.toNumber().toFixed(2))
+      .then(setPricePrediction);
   }, []);
+
+  const etherScanUrl = useEtherScanUrl();
+
   const seeContract = () => {
-    const url = getAddressExploreUrl(betContract.address);
+    if (!etherScanUrl) {
+      message.warn("invalid etherscan url");
+      return;
+    }
+    const url = getAddressExploreUrl(etherScanUrl, betContract.address);
     window.open(url, "_blank");
   };
 
@@ -58,10 +72,13 @@ const PredictionStart: FC<{ nextStep: () => void; betContract: Contract; deadlin
     <div className={css.wrapper}>
       <div className={css.contentLine}>
         <span>
-          In 2022-07-22 12:00 am UTC, if ETH price is higher or equal than 2000.00 USD , address{" "}
-          {betContract.address} will send 20,000.00 USDC to {isHigher ? starter : counterParty}. If
-          ETH price is lower than 2000.00 USD, then {betContract.address} will send 20,000.00 USDC
-          to {isHigher ? counterParty : starter}.
+          In 2022-07-22 12:00 am UTC, if ETH price is higher or equal than {pricePrediction} USD ,
+          address
+          <AddressCmp address={betContract.address} />
+          will send 20,000.00 USDC to <AddressCmp address={isHigher ? starter : counterParty} /> .
+          If ETH price is lower than {pricePrediction} USD, then
+          <AddressCmp address={betContract.address} />
+          will send 20,000.00 USDC to <AddressCmp address={isHigher ? counterParty : starter} /> .
         </span>
       </div>
       <div className={css.button}>

@@ -7,6 +7,7 @@ import copy from "copy-to-clipboard";
 import { handleError } from "@utils/handleError";
 import { approveUSDC } from "@apis/approveUSDC";
 import { useWeb3React } from "@web3-react/core";
+import useEtherScanUrl from "@hooks/useEtherScanUrl";
 
 const SharePrediction: FC<{
   nextStep: () => void;
@@ -34,11 +35,11 @@ const SharePrediction: FC<{
         : await betContract.starter_paied();
       setIsPaid(isPaid);
       const amount = await betContract.amount();
-      setAmount(amount.toNumber());
+      setAmount(amount.toNumber().toFixed(2));
       const isHigher = await betContract.higherOrEqual();
       setIsHigher(isHigher);
       const pricePrediction = await betContract.pricePrediction();
-      setPricePrediction(pricePrediction.toNumber());
+      setPricePrediction(pricePrediction.toNumber().toFixed(2));
     } catch (error) {
       handleError(error as Error);
     } finally {
@@ -69,8 +70,14 @@ const SharePrediction: FC<{
     }
   };
 
+  const etherScanUrl = useEtherScanUrl();
+
   const seeContract = () => {
-    const url = getAddressExploreUrl(betContract.address);
+    if (!etherScanUrl) {
+      message.warn("invalid etherscan url");
+      return;
+    }
+    const url = getAddressExploreUrl(etherScanUrl, betContract.address);
     window.open(url, "_blank");
   };
 

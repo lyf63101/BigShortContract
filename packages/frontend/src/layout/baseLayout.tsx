@@ -2,7 +2,7 @@ import { AppstoreOutlined, RocketOutlined } from "@ant-design/icons";
 import WallectButton from "@components/WallectButton";
 import { ROUTERS } from "@constants/router";
 import { Button, Menu, MenuProps } from "antd";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import css from "./index.module.less";
 
@@ -28,6 +28,11 @@ const BaseLayout: FC<{ children: ReactNode }> = ({ children }) => {
     setCurrent(e.key);
     navigate(e.key);
   };
+
+  useEffect(() => {
+    setCurrent(location.pathname);
+  }, [location.pathname]);
+
   return (
     <div className={css.wrapper}>
       <div className={css.header}>

@@ -12,7 +12,7 @@ const NewPredictionStep: FC<{ step: StepNum; setStep: (v: StepNum) => void }> = 
   step,
   setStep,
 }) => {
-  const routerMatch = useMatch(ROUTERS.NEW_PREDICATION);
+  const routerMatch = useMatch(ROUTERS.MY_PREDICATION);
   if (!routerMatch) return null;
   return (
     <div className={css.steps}>

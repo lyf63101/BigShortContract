@@ -1,6 +1,8 @@
+import AddressCmp from "@components/AddressCmp";
+import useEtherScanUrl from "@hooks/useEtherScanUrl";
 import { getAddressExploreUrl } from "@utils/getAddressExploreUrl";
 import { handleError } from "@utils/handleError";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { Contract } from "ethers";
 import { FC, useEffect, useMemo, useState } from "react";
 import css from "./index.module.less";
@@ -23,11 +25,11 @@ const PredictionResult: FC<{
     betContract.higherOrEqual().then(setIsHigher);
     betContract
       .pricePrediction()
-      .then((res: any) => res.toNumber())
+      .then((res: any) => res.toNumber().toFixed(2))
       .then(setPricePrediction);
     betContract
       .amount()
-      .then((res: any) => res.toNumber())
+      .then((res: any) => res.toNumber().toFixed(2))
       .then(setAmount);
   }, []);
 
@@ -42,8 +44,14 @@ const PredictionResult: FC<{
     }
   };
 
+  const etherScanUrl = useEtherScanUrl();
+
   const seeContract = () => {
-    const url = getAddressExploreUrl(betContract.address);
+    if (!etherScanUrl) {
+      message.warn("invalid etherscan url");
+      return;
+    }
+    const url = getAddressExploreUrl(etherScanUrl, betContract.address);
     window.open(url, "_blank");
   };
 
@@ -57,12 +65,15 @@ const PredictionResult: FC<{
       <div className={css.contentLine}>
         <span>
           In 2022-07-22 12:00 am UTC, if ETH price is higher or equal than {pricePrediction} USD ,
-          then address 【{higher}】 will send {amount} USDC to 【{lower}】.
+          then address <AddressCmp address={higher} /> will send {amount} USDC to
+          <AddressCmp address={lower} />.
         </span>
       </div>
       <div className={css.contentLine}>
-        If ETH price is lower than {pricePrediction} USD, then address 【{lower}】 will send{" "}
-        {amount} USDC to 【{higher}】.
+        <span>
+          If ETH price is lower than {pricePrediction} USD, then address
+          <AddressCmp address={lower} /> will send {amount} USDC to <AddressCmp address={higher} />.
+        </span>
       </div>
       <div className={css.resultLine}>
         <span>Winner is address: XXXXXX</span>
