@@ -12,5 +12,11 @@
   "files.eol": "\n",
   "editor.tabSize": 2,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "stylelint.validate": ["less", "sass", "scss", "css"]
+  "stylelint.validate": [
+    "less",
+    "sass",
+    "scss",
+    "css"
+  ],
+  "compile-hero.disable-compile-files-on-did-save-code": false
 }
