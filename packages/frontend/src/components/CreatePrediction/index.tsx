@@ -12,6 +12,9 @@ const CreatePrediction: FC<{ nextStep: () => void }> = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { connector, library, account } = useWeb3React();
+  const [amount, setAmount] = useState(0);
+  const [predictedPrice, setPredictedPrice] = useState(0);
+  const [higherOrEqual, setHigherOrEqual] = useState(undefined);
 
   const createPrediction = async () => {
     if (!library) return;
@@ -105,7 +108,7 @@ const CreatePrediction: FC<{ nextStep: () => void }> = () => {
             </span>
           }
         >
-          <Input />
+          <Input onChange={(e) => setPredictedPrice(Number(e.target.value))} />
         </FormItem>
         <FormItem
           name="higherOrEqual"
@@ -119,7 +122,7 @@ const CreatePrediction: FC<{ nextStep: () => void }> = () => {
             </span>
           }
         >
-          <Radio.Group>
+          <Radio.Group onChange={(e) => setHigherOrEqual(e.target.value)}>
             <Radio value={false}>Higher or equal</Radio>
             <Radio value={true}>Lower than prediction price</Radio>
           </Radio.Group>
@@ -136,14 +139,24 @@ const CreatePrediction: FC<{ nextStep: () => void }> = () => {
             </span>
           }
         >
-          <Input />
+          <Input onChange={(e) => setAmount(Number(e.target.value))} />
         </FormItem>
       </Form>
       <div className={css.bottomSubmit}>
-        <span>You win if ETH price is XXXX than XXXXX. </span>
+        <span>
+          You win if ETH price is{" "}
+          {typeof higherOrEqual === "undefined"
+            ? "--"
+            : higherOrEqual
+            ? "lower than prediction price"
+            : "higher or equal"}{" "}
+          than ${predictedPrice || "--"}.{" "}
+        </span>
       </div>
       <div className={css.bottomSubmit}>
-        <span>Stake $XXXX TO Win $XXXX</span>
+        <span>
+          Stake ${amount || "--"} TO Win ${amount || "--"}
+        </span>
       </div>
       <div className={css.bottomSubmit}>
         <Button type="primary" disabled={!connector} loading={loading} onClick={createPrediction}>

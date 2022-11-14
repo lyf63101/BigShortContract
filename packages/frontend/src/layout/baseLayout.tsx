@@ -9,12 +9,12 @@ import css from "./index.module.less";
 const items: MenuProps["items"] = [
   {
     label: "New Prediction",
-    key: ROUTERS.NEW_PREDICATION,
+    key: ROUTERS.NEW_PREDICTION,
     icon: <RocketOutlined />,
   },
   {
     label: "My Prediction",
-    key: ROUTERS.MY_PREDICATION,
+    key: ROUTERS.MY_PREDICTION,
     icon: <AppstoreOutlined />,
   },
 ];

@@ -18,8 +18,8 @@ const App: FC<Record<string, unknown>> = () => {
             <BaseLayout>
               <Routes>
                 <Route path={ROUTERS.HOME} element={<Home />} />
-                <Route path={ROUTERS.NEW_PREDICATION} element={<NewPrediction />} />
-                <Route path={ROUTERS.MY_PREDICATION} element={<MyPrediction />} />
+                <Route path={ROUTERS.NEW_PREDICTION} element={<NewPrediction />} />
+                <Route path={ROUTERS.MY_PREDICTION} element={<MyPrediction />} />
                 <Route path={ROUTERS.ERROR} element={<ErrorPage />} />
                 <Route path="/*" element={<Home />} />
                 <Route path="/*" element={<Navigate to={ROUTERS.ERROR} />} />

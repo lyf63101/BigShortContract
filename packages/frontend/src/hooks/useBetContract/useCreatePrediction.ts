@@ -105,7 +105,7 @@ export const useCreatePrediction = () => {
       const curBet = await getBetContract(signer, result);
       setBetContract(curBet);
 
-      navigate(ROUTERS.MY_PREDICATION);
+      navigate(ROUTERS.MY_PREDICTION);
       await getStep(curBet);
     } catch (error) {
       handleError(error as Error);

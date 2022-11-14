@@ -129,7 +129,7 @@ const SharePrediction: FC<{
           </Button>
         ) : (
           <Button type="primary" loading={loading} onClick={payTheBet}>
-            Paid to accept the bet
+            Pay to accept the bet
           </Button>
         )}
       </div>
