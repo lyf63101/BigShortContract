@@ -22,7 +22,7 @@ export const approveUSDC = async (
   if (balance <= 0) {
     throw new Error(`balance of ${signerAddress} isn't enough`);
   }
-  const result = await contract.approve(betContract.address, amount);
+  const result = await contract.approve(betContract.address, Number(amount));
   // debugger;
   // @ts-ignore
   window.usdc = contract;
