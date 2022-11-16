@@ -32,8 +32,6 @@ export const useCreatePrediction = () => {
   const { library, account } = useWeb3React();
   const navigate = useNavigate();
 
-  console.log("library:", library);
-
   const reducer = (
     state: ICreatePrediction,
     action: { type: keyof ICreatePrediction | "init"; payload: ICreatePrediction }
