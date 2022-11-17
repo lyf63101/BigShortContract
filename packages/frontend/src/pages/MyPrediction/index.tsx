@@ -39,6 +39,7 @@ const MyPrediction = () => {
               nextStep={() => setStep(3)}
               betContract={betContract}
               isCounterParty={isCounterParty}
+              deadline={deadline}
             />
           )}
         </div>

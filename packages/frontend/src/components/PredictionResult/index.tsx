@@ -6,12 +6,14 @@ import { Button, message } from "antd";
 import { Contract } from "ethers";
 import { FC, useEffect, useMemo, useState } from "react";
 import css from "./index.module.less";
+import dayjs from "dayjs";
 
 const PredictionResult: FC<{
   nextStep: () => void;
   betContract: Contract;
   isCounterParty: boolean;
-}> = ({ betContract }) => {
+  deadline: number;
+}> = ({ betContract, deadline }) => {
   const [loading, setLoading] = useState(false);
   const [counterParty, setCounterParty] = useState("");
   const [starter, setStarter] = useState("");
@@ -64,8 +66,9 @@ const PredictionResult: FC<{
     <div className={css.wrapper}>
       <div className={css.contentLine}>
         <span>
-          In 2022-07-22 12:00 am UTC, if ETH price is higher or equal than {pricePrediction} USD ,
-          then address <AddressCmp address={higher} /> will send {amount} USDC to
+          In {dayjs(deadline * 1000).format("YYYY-MM-DD HH:mm:ss")}, if ETH price is higher or equal
+          than {pricePrediction} USD , then address <AddressCmp address={higher} /> will send{" "}
+          {amount} USDC to
           <AddressCmp address={lower} />.
         </span>
       </div>

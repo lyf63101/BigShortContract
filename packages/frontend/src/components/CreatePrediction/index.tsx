@@ -26,7 +26,7 @@ const CreatePrediction: FC<{ nextStep: () => void }> = () => {
       const payload = {
         counter_party: formData.counter_party,
         predicted_price: Number(formData.predicted_price) || 0,
-        deadline: formData.deadline.valueOf() || 0,
+        deadline: Math.floor(formData.deadline.valueOf() / 1000) || 0,
         higherOrEqual: formData.higherOrEqual,
         amount: Number(formData.amount) || 0,
       };
