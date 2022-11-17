@@ -37,7 +37,9 @@ const BaseLayout: FC<{ children: ReactNode }> = ({ children }) => {
     <div className={css.wrapper}>
       <div className={css.header}>
         <div className={css.left}>
-          <div className={css.logo}>BigShort Protocol</div>
+          <div className={css.logo} onClick={() => navigate(ROUTERS.HOME)}>
+            BigShort Protocol
+          </div>
           <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
         </div>
         <div>

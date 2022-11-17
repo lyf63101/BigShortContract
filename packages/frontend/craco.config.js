@@ -4,9 +4,12 @@ const CracoESLintWebpackPlugin = require("craco-eslint-webpack-plugin");
 const CracoLessPlugin = require("craco-less");
 const { loaderByName } = require("@craco/craco");
 const CracoEsbuildPlugin = require("craco-esbuild");
+const { GenerateSW } = require("workbox-webpack-plugin");
 const path = require("path");
 
 const lessModuleRegex = /\.module\.less$/;
+
+const isProd = process.env.NODE_ENV === "production";
 
 module.exports = {
   plugins: [
@@ -168,25 +171,35 @@ module.exports = {
   // typescript: {
   //   enableTypeChecking: true /* (default value)  */
   // },
-  // webpack: {
-  //   alias: {},
-  //   plugins: {
-  //     add: [] /* An array of plugins */,
-  //     add: [
-  //       plugin1,
-  //       [plugin2, "append"],
-  //       [plugin3, "prepend"] /* Specify if plugin should be appended or prepended */
-  //     ] /* An array of plugins */,
-  //     remove:
-  //       [] /* An array of plugin constructor's names (i.e. "StyleLintPlugin", "ESLintWebpackPlugin" ) */
-  //   },
-  //   configure: {
-  //     /* Any webpack configuration options: https://webpack.js.org/configuration */
-  //   },
-  //   configure: (webpackConfig, { env, paths }) => {
-  //     return webpackConfig;
-  //   }
-  // },
+  webpack: {
+    // alias: {},
+    plugins: {
+      add: [
+        isProd &&
+          new GenerateSW({
+            cacheId: "webpack-pwa",
+            clientsClaim: true,
+            skipWaiting: true,
+            swDest: "service-wroker.js",
+            // globIgnores: ["service-wroker.js"],
+            // globPatterns: ["**/*.{html,js,css,png.jpg}"],
+          }),
+      ] /* An array of plugins */,
+      // add: [
+      //   plugin1,
+      //   [plugin2, "append"],
+      //   [plugin3, "prepend"] /* Specify if plugin should be appended or prepended */
+      // ] /* An array of plugins */,
+      // remove:
+      //   [] /* An array of plugin constructor's names (i.e. "StyleLintPlugin", "ESLintWebpackPlugin" ) */
+    },
+    // configure: {
+    //   /* Any webpack configuration options: https://webpack.js.org/configuration */
+    // },
+    // configure: (webpackConfig, { env, paths }) => {
+    //   return webpackConfig;
+    // },
+  },
   // jest: {
   //   babel: {
   //     addPresets: true /* (default value) */,
