@@ -177,10 +177,10 @@ module.exports = {
       add: [
         isProd &&
           new GenerateSW({
-            cacheId: "webpack-pwa",
+            // cacheId: "webpack-pwa",
             clientsClaim: true,
             skipWaiting: true,
-            swDest: "service-wroker.js",
+            // swDest: "service-wroker.js",
             // globIgnores: ["service-wroker.js"],
             // globPatterns: ["**/*.{html,js,css,png.jpg}"],
           }),
