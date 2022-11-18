@@ -184,7 +184,7 @@ module.exports = {
             // globIgnores: ["service-wroker.js"],
             // globPatterns: ["**/*.{html,js,css,png.jpg}"],
           }),
-      ] /* An array of plugins */,
+      ].filter(Boolean) /* An array of plugins */,
       // add: [
       //   plugin1,
       //   [plugin2, "append"],
