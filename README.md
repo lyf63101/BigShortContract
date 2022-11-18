@@ -30,7 +30,6 @@ This project is the beginning of decentralized point to point future swap. More 
 <img width="1207" alt="Screen Shot 2022-11-18 at 15 38 40" src="https://user-images.githubusercontent.com/3343486/202647470-53a3dc70-7e5c-4d5b-a3eb-60e7ea88eb04.png">
 <img width="1233" alt="Screen Shot 2022-11-18 at 15 38 50" src="https://user-images.githubusercontent.com/3343486/202647495-26ef4fd5-046f-4936-a780-a79f310b1798.png">
 <img width="1221" alt="Screen Shot 2022-11-18 at 15 38 58" src="https://user-images.githubusercontent.com/3343486/202647513-bee4ed0e-354d-46de-b928-4979df698270.png">
-<img width="1228" alt="Screen Shot 2022-11-18 at 15 39 07" src="https://user-images.githubusercontent.com/3343486/202647538-96d52b47-41e2-406e-9d59-450c0d2f4cb5.png">
 
 
 
