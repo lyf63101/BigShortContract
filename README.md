@@ -13,5 +13,11 @@ In 2022 March , before $Luna crash,  Twitter Influencer Algod has tweeted about 
 
 ## Description 
 
+BigShort protocol is implemented in Ethereum network and written in solidity. There are two sides of this protocol: Protocol initiator and protocol receiver. Initiator of the future formulates the contract details: price/ end time / contract size / receiver's wallet address. After initiator creates protocol , he can send the link of receiver. Receiver confirms and verify the contract onchain. Then both side can deposit their asset (their contrat SIZE) 
+into the contract address. When the future reaches end time, the contract would use Chainlink's price for oracle price to determine the result of the contract. Later, the asset would automatically sent to either initiator or receiver's address.
+
+This project is the beginning of decentralized point to point future swap. More function would be added into this protocol. Our ultimate goal is to provide more decentralized trading in financial scenarios. 
+
+
 
 
