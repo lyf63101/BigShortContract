@@ -1,6 +1,6 @@
 # BigShort Protocol
 
-这里放一个视频
+Video
 
 ## Summary 
 
@@ -36,6 +36,7 @@ This project is the beginning of decentralized point to point future swap. More 
 <img width="1197" alt="Screen Shot 2022-11-18 at 15 44 50" src="https://user-images.githubusercontent.com/3343486/202648554-a0a1c89b-461d-4091-b9b2-853c04bbc8dc.png">
 <img width="1179" alt="Screen Shot 2022-11-18 at 15 44 55" src="https://user-images.githubusercontent.com/3343486/202648564-7a539485-0d8d-4684-9461-c101a8abe665.png">
 <img width="1197" alt="Screen Shot 2022-11-18 at 15 45 02" src="https://user-images.githubusercontent.com/3343486/202648574-c3e4d874-6b7b-4ec5-856d-b8784d518775.png">
+<img width="998" alt="Screen Shot 2022-11-18 at 15 46 36" src="https://user-images.githubusercontent.com/3343486/202648811-f1ba9cd6-51db-4822-886a-6ee6daba6f85.png">
 
 
 
